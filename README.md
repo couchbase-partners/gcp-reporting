@@ -9,7 +9,7 @@ After that you can run:
     python usage.py
 
 ## Revenue
-The revenue information is all in a Google drive that Google shares with us.  You'll need to grab the latest month and dump that in a csv under the revenue directory.
+The revenue information is all in a Google drive that Google shares with us.  You'll need to grab the latest month and dump that in a csv under the revenue directory.  For that you want the "Charges and Usage" file.  Rename that to be the date with a '.csv' at the end.
 
 After that you can run:
 
