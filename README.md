@@ -14,4 +14,3 @@ The revenue information is all in a Google drive that Google shares with us.  Yo
 After that you can run:
 
     python revenue.py
-.
