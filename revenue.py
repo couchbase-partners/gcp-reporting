@@ -22,42 +22,31 @@ def process_file(filename):
     date = date.replace('./revenue/', '')
     date = date.replace('.csv', '')
     date = parse(date)
+    date = str(date.month) + '/1/' + str(date.year)
 
-    hourly=0
-    byol=0
-    legacyfree=0
-    legacypaid=0
+    revenue=0
 
-#    with open(filename) as csvfile:
-#        reader = csv.DictReader(csvfile)
-#        for row in reader:
-#            process_row(row)
+    with open(filename) as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            process_row(date, row)
 
-def update_revenue(row):
-    date = row['Charge Date']
-    if date:
-        date = date.split(' ')[0]
-        date = parse(date)
-        date = str(date.month) + '/1/' + str(date.year)
-    else:
-        date = None
+def process_row(date, row):
+    if not date in revenue:
+        revenue[date]={}
+        revenue[date]['revenue']=0
 
-    if date:
-        if not date in revenue:
-            revenue[date]={}
-            revenue[date]['revenue']=0
-            revenue[date]['legacyrevenue']=0
+    # legacy report
+    if 'amount' in row:
+        revenue[date]['revenue']+=float(row['amount'])
 
-        if 'Charge' in row['Transaction Type'] or 'Customer Refund' in row['Transaction Type']:
-            if 'Hourly Pricing' in row['SKU']:
-                revenue[date]['revenue']+=float(row['Payout Amount (PC)'])
-            else:
-                revenue[date]['legacyrevenue']+=float(row['Payout Amount (PC)'])
+    # current report
+    if 'Due Partner' in row:
+        revenue[date]['revenue']+=float(row['Due Partner'])
 
 def print_revenue():
-    print('Month, Revenue, Legacy Revenue, Total Revenue')
+    print('Month, Revenue')
     for date in revenue:
-        total = revenue[date]['revenue']+revenue[date]['legacyrevenue']
-        print(date + ', ' + str(revenue[date]['revenue']) + ', ' + str(revenue[date]['legacyrevenue']) + ', ' + str(total))
+        print(date + ', ' + str(revenue[date]['revenue']))
 
 run()
